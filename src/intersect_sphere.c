@@ -6,14 +6,15 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 20:39:50 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/19 20:48:09 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/21 00:07:25 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void	normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n)
+void	normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n, float t)
 {
+	(void)t;
 	ft_sub_vector(&r->start, &s->props.pos, n);
 	normalize_vector(n);
 }

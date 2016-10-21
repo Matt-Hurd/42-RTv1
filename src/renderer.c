@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 04:47:42 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/19 20:53:08 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/21 01:58:09 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ray_trace(t_data *d, t_ray r, float coef, t_RGB *color, int depth)
 	t_list	*curr;
 	t_list	*curr2;
 	float	t;
-	void	*closest;
+	t_list	*closest;
 	int		type;
 	t_vec3 n;
 	t_light currentLight;
@@ -38,17 +38,14 @@ void	ray_trace(t_data *d, t_ray r, float coef, t_RGB *color, int depth)
 		while (curr)
 		{
 			if (intersect_shape(&r, curr->content, curr->content_size, &t))
-			{
-				type = curr->content_size;
-				closest = curr->content;
-			}
+				closest = curr;
 			curr = curr->next;
 		}
 		if (closest)
 		{
 			scale_vector(t, &r.dir, temp);
 			ft_add_vector(&r.start, temp, &r.start);
-			normal_shape(&r, &n, closest, type);
+			normal_shape(&r, &n, closest, t);
 			curr = d->scene->objects;
 			while (curr)
 			{
@@ -81,17 +78,17 @@ void	ray_trace(t_data *d, t_ray r, float coef, t_RGB *color, int depth)
 					if (!obscured)
 					{
 						lambert = ft_dot_vector(&lightRay.dir, &n) * coef;
-						color->r += lambert * currentLight.props.color.r * ((t_sphere *)closest)->props.color.r * currentLight.props.radiance;
-						color->g += lambert * currentLight.props.color.g * ((t_sphere *)closest)->props.color.g * currentLight.props.radiance;
-						color->b += lambert * currentLight.props.color.b * ((t_sphere *)closest)->props.color.b * currentLight.props.radiance;
+						color->r += lambert * currentLight.props.color.r * ((t_sphere *)closest->content)->props.color.r * currentLight.props.radiance * (1.0 - ((t_sphere *)closest->content)->props.reflect);
+						color->g += lambert * currentLight.props.color.g * ((t_sphere *)closest->content)->props.color.g * currentLight.props.radiance * (1.0 - ((t_sphere *)closest->content)->props.reflect);
+						color->b += lambert * currentLight.props.color.b * ((t_sphere *)closest->content)->props.color.b * currentLight.props.radiance * (1.0 - ((t_sphere *)closest->content)->props.reflect);
 					}
 				}
 				curr = curr->next;
 			}
-			scale_vector(2.0 * ft_dot_vector(&r.dir, &n), &n, temp);
+			scale_vector(2 * ft_dot_vector(&r.dir, &n), &n, temp);
 			ft_sub_vector(&r.dir, temp, &r.dir);
 			free(temp);
-			coef *= ((t_sphere *)closest)->props.reflect;
+			coef *= ((t_sphere *)closest->content)->props.reflect;
 			depth++;
 		}
 		else

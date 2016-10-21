@@ -37,8 +37,6 @@ void	print_sphere_info(t_sphere *sphere)
 void	print_plane_info(t_plane *plane)
 {
 	printf("[plane]\n");
-	printf("Size: ");
-	print_vec3(plane->dims);
 	print_properties(plane->props);
 }
 

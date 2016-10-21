@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:42:11 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/19 20:02:48 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/20 22:40:54 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <math.h>
 # define ABS(x) ((x > 0) ? x : x * -1)
+# define SQ(x) (x * x)
 
 
 
@@ -73,7 +74,6 @@ typedef struct	s_props
 typedef struct	s_plane
 {
 	t_props props;
-	t_vec3	dims;
 }				t_plane;
 
 typedef struct	s_cylinder

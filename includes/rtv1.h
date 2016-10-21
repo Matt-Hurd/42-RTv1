@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:06:16 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/19 21:24:12 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/20 23:03:03 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,16 @@ void		parse_light(t_data *d, t_list *list);
 int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
 void		normalize_vector(t_vec3 *v);
 int 		intersect_shape(t_ray *r, void *s, int type, float *t);
-void		normal_shape(t_ray *r, t_vec3 *n, void *s, int type);
-void		normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n);
+void		normal_shape(t_ray *r, t_vec3 *n, t_list *s, float t);
+void		normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n, float t);
 int			intersect_cylinder(t_ray *r, t_cylinder *c, float *t);
+int			intersect_plane(t_ray *r, t_plane *p, float *t);
+void		normal_plane(t_ray *r, t_plane *p, t_vec3 *n, float t);
+void		normal_cylinder(t_ray *r, t_cylinder *c, t_vec3 *n, float t);
 
 //Debugging
 void	print_scene_info(t_data *d);
 void	print_RGB(t_RGB rgb);
+void	print_vec3(t_vec3 v);
 
 #endif

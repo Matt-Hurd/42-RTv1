@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 17:14:06 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/19 16:05:44 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/20 21:43:00 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,22 @@ void	parse_sphere(t_data *d, t_list *list)
 
 void	parse_plane(t_data *d, t_list *list)
 {
-	char		**buff;
 	t_plane		*plane;
 	t_list		*ret;
+	float		global_matrix[4][4];
+	t_vec3		n;
 
+	n.x = 0;
+	n.y = 0;
+	n.z = -1;
+	ft_make_identity_matrix(global_matrix);
 	plane = (t_plane *)ft_memalloc(sizeof(t_plane));
 	parse_props(list, &plane->props);
-	while (list && !ft_strchr(list->content, '['))
-	{
-		if (ft_strchr(list->content, '='))
-		{
-			buff = ft_strsplit(list->content, '=');
-			buff[0] = ft_strtrim(buff[0]);
-			if (ft_strequ(buff[0], "dims"))
-				parse_triple(buff[1], &plane->dims);
-			free(buff);
-		}
-		list = list->next;
-	}
+	ft_tr_rotate(global_matrix, 
+		plane->props.rot.x,
+		plane->props.rot.y,
+		plane->props.rot.z);
+	ft_vec_mult_mat(&n, global_matrix, &plane->props.rot);
 	ret = ft_lstnew(plane, sizeof(t_plane));
 	ret->content_size = PLANE;
 	ft_lstadd(&d->scene->objects, ret);

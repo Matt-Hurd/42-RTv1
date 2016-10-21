@@ -6,7 +6,7 @@
 #    By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/28 19:34:56 by mhurd             #+#    #+#              #
-#    Updated: 2016/10/19 21:25:09 by mhurd            ###   ########.fr        #
+#    Updated: 2016/10/20 21:39:12 by mhurd            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC		= main.c \
 		  parse_light.c \
 		  intersect_sphere.c \
 		  intersect_cylinder.c \
+		  intersect_plane.c \
 		  helpers.c
 
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
