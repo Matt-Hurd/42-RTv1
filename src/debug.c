@@ -44,7 +44,6 @@ void	print_cone_info(t_cone *cone)
 {
 	printf("[cone]\n");
 	printf("Radius: %f\n", cone->radius);
-	printf("Height: %f\n", cone->height);
 	print_properties(cone->props);
 }
 
@@ -52,7 +51,6 @@ void	print_cylinder_info(t_cylinder *cylinder)
 {
 	printf("[cylinder]\n");
 	printf("Radius: %f\n", cylinder->radius);
-	printf("Height: %f\n", cylinder->height);
 	print_properties(cylinder->props);
 }
 

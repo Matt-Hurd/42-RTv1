@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 17:14:06 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/20 21:43:00 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/22 01:20:27 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,12 @@ void	parse_cylinder(t_data *d, t_list *list)
 	char		**buff;
 	t_cylinder	*cylinder;
 	t_list		*ret;
+	float		global_matrix[4][4];
+	t_vec3		n;
 
+	n.x = 0;
+	n.y = -1;
+	n.z = 0;
 	cylinder = (t_cylinder *)ft_memalloc(sizeof(t_cylinder));
 	parse_props(list, &cylinder->props);
 	while (list && !ft_strchr(list->content, '['))
@@ -106,14 +111,18 @@ void	parse_cylinder(t_data *d, t_list *list)
 		{
 			buff = ft_strsplit(list->content, '=');
 			buff[0] = ft_strtrim(buff[0]);
-			if (ft_strequ(buff[0], "height"))
-				cylinder->height = ft_atoi(buff[1]); //change to atof
 			if (ft_strequ(buff[0], "radius"))
 				cylinder->radius = ft_atoi(buff[1]); //change to atof
 			free(buff);
 		}
 		list = list->next;
 	}
+	ft_make_identity_matrix(global_matrix);
+	ft_tr_rotate(global_matrix, 
+		cylinder->props.rot.x,
+		cylinder->props.rot.y,
+		cylinder->props.rot.z);
+	ft_vec_mult_mat(&n, global_matrix, &cylinder->props.rot);
 	ret = ft_lstnew(cylinder, sizeof(t_cylinder));
 	ret->content_size = CYLINDER;
 	ft_lstadd(&d->scene->objects, ret);
@@ -136,7 +145,7 @@ void	parse_cone(t_data *d, t_list *list)
 			if (ft_strequ(buff[0], "height"))
 				cone->height = ft_atoi(buff[1]); //change to atof
 			if (ft_strequ(buff[0], "radius"))
-				cone->radius = ft_atoi(buff[1]); //change to atof
+				cone->radius = (float)ft_atoi(buff[1]) * M_PI / 180; //change to atof
 			free(buff);
 		}
 		list = list->next;
