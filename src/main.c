@@ -21,7 +21,7 @@ void	display_usage(char *av)
 	ft_putendl(" input_file");
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	t_data	*data;
 

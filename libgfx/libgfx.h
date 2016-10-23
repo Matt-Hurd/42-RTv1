@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:42:11 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/20 22:40:54 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/22 22:46:15 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ typedef struct	s_plane
 typedef struct	s_cylinder
 {
 	t_props	props;
-	float height;
 	float radius;
+	float height;
 }				t_cylinder;
 
 typedef struct	s_cone
 {
 	t_props	props;
-	float height;
 	float radius;
+	float height;
 }				t_cone;
 
 typedef struct	s_sphere
@@ -101,6 +101,12 @@ typedef struct	s_light
 	t_props	props;
 }				t_light;
 
+typedef struct	s_ray
+{
+	t_vec3 start;
+	t_vec3 dir;
+}				t_ray;
+
 typedef struct	s_scene
 {
 	char	*name;
@@ -109,6 +115,11 @@ typedef struct	s_scene
 	t_vec3	cam_pos;
 	t_vec3	cam_rot;
 	t_list	*objects;
+	t_list	*closest;
+	t_light	currentLight;
+	t_ray	lightRay;
+	t_RGB	color;
+	float	coef;
 }				t_scene;
 
 typedef struct	s_data
@@ -122,12 +133,6 @@ typedef struct	s_data
 	int		ed;
 	t_scene *scene;
 }				t_data;
-
-typedef struct	s_ray
-{
-	t_vec3 start;
-	t_vec3 dir;
-}				t_ray;
 
 enum			e_object
 {
@@ -151,8 +156,8 @@ void			ft_make_identity_matrix(float matrix[4][4]);
 t_vec3			*ft_make_vec3(int x, int y, int z);
 t_vertex		*ft_make_vertex(int x, int y, int z);
 void			put_pixel(t_data *d, int x, int y, t_RGB color);
-void			ft_sub_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
-float			ft_dot_vector(t_vec3 *v1, t_vec3 *v2);
+void			sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
+float			dot_vect(t_vec3 *v1, t_vec3 *v2);
 void			scale_vector(float c, t_vec3 *v, t_vec3 *d);
 void			ft_add_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
 #endif

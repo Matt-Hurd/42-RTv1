@@ -6,95 +6,50 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 04:47:42 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/21 23:22:29 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/22 22:48:56 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void	ray_trace(t_data *d, t_ray r, float coef, t_RGB *color, int depth)
+void	ray_trace(t_data *d, t_ray r, float coef, int depth)
 {
-	depth = 0;
 	t_list	*curr;
-	t_list	*curr2;
 	float	t;
-	t_list	*closest;
 	int		type;
-	t_vec3 n;
-	t_light currentLight;
-	t_vec3 dist;
-	t_ray lightRay;
-	float lambert;
-	float gloss;
-	int obscured;
+	t_vec3	n;
 	t_vec3	*temp;
 
-	while (depth < 1 && coef > 0.0)
+	d->scene->coef = coef;
+	while (depth < 1 && d->scene->coef > 0.0)
 	{
 		t = 30000;
 		curr = d->scene->objects;
-		closest = NULL;
+		d->scene->closest = NULL;
 		type = NONE;
 		temp = (t_vec3 *)ft_memalloc(sizeof(t_vec3));
 		while (curr)
 		{
 			if (intersect_shape(&r, curr->content, curr->content_size, &t))
-				closest = curr;
+				d->scene->closest = curr;
 			curr = curr->next;
 		}
-		if (closest)
+		if (d->scene->closest)
 		{
 			scale_vector(t, &r.dir, temp);
 			ft_add_vector(&r.start, temp, &r.start);
-			normal_shape(&r, &n, closest, t);
+			normal_shape(&r, &n, d->scene->closest);
 			curr = d->scene->objects;
 			while (curr)
 			{
 				if (curr->content_size == LIGHT)
-				{
-					obscured = 0;
-					currentLight = *(t_light *)curr->content;
-					ft_sub_vector(&currentLight.props.pos, &r.start, &dist);
-					if (ft_dot_vector(&n, &dist) <= 0.0f)
-					{
-						curr = curr->next;
-						continue ;
-					}
-					t = sqrtf(ft_dot_vector(&dist, &dist));
-					if (t <= 0.0)
-					{
-						curr = curr->next;
-						continue ;
-					}
-					lightRay.start = r.start;
-					normalize_vector(&dist);
-					lightRay.dir = dist;
-					curr2 = d->scene->objects;
-					while (curr2 && !obscured)
-					{
-						if (intersect_shape(&lightRay, curr2->content, curr2->content_size, &t))
-							obscured = 1;
-						curr2 = curr2->next;
-					}
-					if (!obscured)
-					{
-						lambert = ft_dot_vector(&lightRay.dir, &n) * coef;
-						gloss = ((t_sphere *)closest->content)->props.reflect > 0 ? ft_dot_vector(&lightRay.dir, &n) : 0;
-						gloss = gloss > 0.95 ? (gloss - 0.95) * 10: 0;
-						color->r += gloss;
-						color->g += gloss;
-						color->b += gloss;
-						color->r += lambert * currentLight.props.color.r * ((t_sphere *)closest->content)->props.color.r * currentLight.props.radiance;
-						color->g += lambert * currentLight.props.color.g * ((t_sphere *)closest->content)->props.color.g * currentLight.props.radiance;
-						color->b += lambert * currentLight.props.color.b * ((t_sphere *)closest->content)->props.color.b * currentLight.props.radiance;
-					}
-				}
+					calc_light(d, curr, r, n);
 				curr = curr->next;
 			}
-			scale_vector(((closest->content_size == SPHERE) ? 1 : 2) * ft_dot_vector(&r.dir, &n), &n, temp);
-			ft_sub_vector(&r.dir, temp, &r.dir);
+			scale_vector(((d->scene->closest->content_size == SPHERE) ? 1 : 2) * dot_vect(&r.dir, &n), &n, temp);
+			sub_vect(&r.dir, temp, &r.dir);
 			free(temp);
-			coef *= ((t_sphere *)closest->content)->props.reflect;
+			d->scene->coef *= ((t_sphere *)d->scene->closest->content)->props.reflect;
 			depth++;
 		}
 		else
@@ -104,21 +59,16 @@ void	ray_trace(t_data *d, t_ray r, float coef, t_RGB *color, int depth)
 
 void	draw_screen(t_data *d)
 {
-	int x;
-	int y;
-	t_ray r;
+	int		x;
+	int		y;
+	t_ray	r;
 	float	global_matrix[4][4];
 	t_vec3	point;
-	t_RGB color;
 
 	ft_make_identity_matrix(global_matrix);
-	ft_tr_rotate(global_matrix, 
-		d->scene->cam_rot.x,
-		d->scene->cam_rot.y,
+	ft_tr_rotate(global_matrix, d->scene->cam_rot.x, d->scene->cam_rot.y,
 		d->scene->cam_rot.z);
-	ft_tr_translate(global_matrix,
-		d->scene->cam_pos.x,
-		d->scene->cam_pos.y,
+	ft_tr_translate(global_matrix, d->scene->cam_pos.x, d->scene->cam_pos.y,
 		d->scene->cam_pos.z);
 	y = -1;
 	while (++y < d->scene->size.y)
@@ -126,22 +76,16 @@ void	draw_screen(t_data *d)
 		x = -1;
 		while (++x < d->scene->size.x)
 		{
-			color.r = 0;
-			color.g = 0;
-			color.b = 0;
-			r.start.x = d->scene->cam_pos.x;
-			r.start.y = d->scene->cam_pos.y;
-			r.start.z = d->scene->cam_pos.z;
+			clear_color(&d->scene->color);
+			scale_vector(1, &d->scene->cam_pos, &r.start);
 			point.x = x - d->scene->size.x / 2;
 			point.y = y - d->scene->size.y / 2;
 			point.z = d->scene->fov * 10;
 			ft_vec_mult_mat(&point, global_matrix, &point);
-			r.dir.x = point.x - r.start.x;
-			r.dir.y = point.y - r.start.y;
-			r.dir.z = point.z - r.start.z;
+			sub_vect(&point, &r.start, &r.dir);
 			normalize_vector(&r.dir);
-			ray_trace(d, r, 1.0, &color, 0);
-			put_pixel(d, x, y, color);
+			ray_trace(d, r, 1.0, 0);
+			put_pixel(d, x, y, d->scene->color);
 		}
 	}
 }
@@ -172,5 +116,5 @@ void	draw_everything(t_data *d)
 	print_scene_info(d);
 	mlx_expose_hook(d->win, expose_hook, d);
 	mlx_hook(d->win, 2, 3, key_hook, d);
-    mlx_loop(d->mlx);
+	mlx_loop(d->mlx);
 }

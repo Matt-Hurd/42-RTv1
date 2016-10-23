@@ -12,19 +12,6 @@
 
 #include "rtv1.h"
 
-void	parse_color(char *color, t_RGB *ref)
-{
-	char **buff;
-
-	buff = ft_strsplit(color, ',');
-	if (ft_count_words(color, ',') != 3)
-		ft_error("Config Format Error");
-	//write hex detection
-	ref->r = (float)ft_atoi(buff[0]) / 255;
-	ref->g = (float)ft_atoi(buff[1]) / 255;
-	ref->b = (float)ft_atoi(buff[2]) / 255;
-}
-
 void	parse_triple(char *triple, t_vec3 *ref)
 {
 	char **buff;
@@ -32,10 +19,25 @@ void	parse_triple(char *triple, t_vec3 *ref)
 	buff = ft_strsplit(triple, ',');
 	if (ft_count_words(triple, ',') != 3)
 		ft_error("Config Format Error");
-	//Write atof
 	ref->x = ft_atoi(buff[0]);
 	ref->y = ft_atoi(buff[1]);
 	ref->z = ft_atoi(buff[2]);
+}
+
+void	set_scene(t_data *d, char **buff)
+{
+	if (ft_strequ(buff[0], "name"))
+		d->scene->name = buff[1];
+	else if (ft_strequ(buff[0], "width"))
+		d->scene->size.x = ft_atoi(buff[1]);
+	else if (ft_strequ(buff[0], "height"))
+		d->scene->size.y = ft_atoi(buff[1]);
+	else if (ft_strequ(buff[0], "fov"))
+		d->scene->fov = ft_atoi(buff[1]);
+	else if (ft_strequ(buff[0], "camera"))
+		parse_triple(buff[1], &d->scene->cam_pos);
+	else if (ft_strequ(buff[0], "cameraRot"))
+		parse_triple(buff[1], &d->scene->cam_rot);
 }
 
 void	parse_scene(t_data *d, t_list *list)
@@ -51,25 +53,12 @@ void	parse_scene(t_data *d, t_list *list)
 			buff = ft_strsplit(list->content, '=');
 			buff[0] = ft_strtrim(buff[0]);
 			buff[1] = ft_strtrim(buff[1]);
-			if (ft_strequ(buff[0], "name"))
-				d->scene->name = buff[1];
-			else if (ft_strequ(buff[0], "width"))
-				d->scene->size.x = ft_atoi(buff[1]);
-			else if (ft_strequ(buff[0], "height"))
-				d->scene->size.y = ft_atoi(buff[1]);
-			else if (ft_strequ(buff[0], "fov"))
-				d->scene->fov = ft_atoi(buff[1]); //change to atof
-			else if (ft_strequ(buff[0], "camera"))
-				parse_triple(buff[1], &d->scene->cam_pos);
-			else if (ft_strequ(buff[0], "cameraRot"))
-				parse_triple(buff[1], &d->scene->cam_rot);
+			set_scene(d, buff);
 			free(buff);
 		}
 		list = list->next;
 	}
-	d->scene->cam_rot.x *= M_PI / 180;
-	d->scene->cam_rot.y *= M_PI / 180;
-	d->scene->cam_rot.z *= M_PI / 180;
+	scale_vector(M_PI / 180, &d->scene->cam_rot, &d->scene->cam_rot);
 }
 
 void	parse_list(t_data *d, t_list *list)

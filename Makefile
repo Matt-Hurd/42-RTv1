@@ -6,7 +6,7 @@
 #    By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/28 19:34:56 by mhurd             #+#    #+#              #
-#    Updated: 2016/10/20 21:39:12 by mhurd            ###   ########.fr        #
+#    Updated: 2016/10/22 20:50:42 by mhurd            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,17 @@ NAME	= RTV1
 SRC		= main.c \
 		  parser.c \
 		  renderer.c \
+		  raytracer.c \
 		  hooks.c \
 		  error.c \
 		  debug.c \
 		  parse_basic.c \
 		  parse_light.c \
+		  parse_extras.c \
 		  intersect_sphere.c \
 		  intersect_cylinder.c \
 		  intersect_plane.c \
+		  intersect_cone.c \
 		  helpers.c
 
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:06:16 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/20 23:03:03 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/22 21:45:24 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,23 @@ void		parse_cylinder(t_data *d, t_list *list);
 void		parse_plane(t_data *d, t_list *list);
 void		parse_props(t_list *list, t_props *props);
 void		parse_light(t_data *d, t_list *list);
-int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
 void		normalize_vector(t_vec3 *v);
+void 		color_point(t_data *d, t_vec3 n, t_RGB *color, float coef);
+void		calc_light(t_data *d, t_list *curr, t_ray r, t_vec3 n);
+void		clear_color(t_RGB *color);
+void		set_radius(t_list *list, void *obj, int type);
+
 int 		intersect_shape(t_ray *r, void *s, int type, float *t);
-void		normal_shape(t_ray *r, t_vec3 *n, t_list *s, float t);
-void		normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n, float t);
 int			intersect_cylinder(t_ray *r, t_cylinder *c, float *t);
 int			intersect_plane(t_ray *r, t_plane *p, float *t);
-void		normal_plane(t_ray *r, t_plane *p, t_vec3 *n, float t);
-void		normal_cylinder(t_ray *r, t_cylinder *c, t_vec3 *n, float t);
+int			intersect_cone(t_ray *r, t_cone *c, float *t);
+int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
+
+void		normal_shape(t_ray *r, t_vec3 *n, t_list *s);
+void		normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n);
+void		normal_plane(t_ray *r, t_plane *p, t_vec3 *n);
+void		normal_cylinder(t_ray *r, t_cylinder *c, t_vec3 *n);
+void		normal_cone(t_ray *r, t_cone *c, t_vec3 *n);
 
 //Debugging
 void	print_scene_info(t_data *d);

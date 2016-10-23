@@ -29,7 +29,7 @@ void	normalize_vector(t_vec3 *v)
 	v->z /= div;
 }
 
-float	ft_dot_vector(t_vec3 *v1, t_vec3 *v2)
+float	dot_vect(t_vec3 *v1, t_vec3 *v2)
 {
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
@@ -41,7 +41,7 @@ void  ft_add_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
        d->z = v1->z + v2->z;
 }
 
-void  ft_sub_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
+void  sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
 {
        d->x = v1->x - v2->x;
        d->y = v1->y - v2->y;
