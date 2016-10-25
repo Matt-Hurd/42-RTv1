@@ -6,13 +6,11 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 15:35:03 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/18 15:40:25 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/24 20:32:32 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-#include <stdio.h>
 
 void	display_usage(char *av)
 {
