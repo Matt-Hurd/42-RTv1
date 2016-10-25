@@ -12,7 +12,7 @@
 
 #include "libgfx.h"
 
-void	put_pixel(t_data *d, int x, int y, t_RGB color)
+void	put_pixel(t_data *d, int x, int y, t_rgb color)
 {
 	int i;
 

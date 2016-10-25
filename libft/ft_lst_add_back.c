@@ -15,7 +15,7 @@
 void	ft_lst_add_back(t_list **alst, t_list *new)
 {
 	t_list	*curr;
-	
+
 	if (!new || !alst)
 		return ;
 	if (!*alst)

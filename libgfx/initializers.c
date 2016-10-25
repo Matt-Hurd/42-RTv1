@@ -12,7 +12,7 @@
 
 #include "libgfx.h"
 
-t_vec3	*ft_make_vec3(int x, int y, int z)
+t_vec3		*ft_make_vec3(int x, int y, int z)
 {
 	t_vec3 *ret;
 

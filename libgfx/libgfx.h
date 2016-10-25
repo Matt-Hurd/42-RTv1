@@ -19,27 +19,12 @@
 # define ABS(x) ((x > 0) ? x : x * -1)
 # define SQ(x) (x * x)
 
-
-
-
-
-
-#include <stdio.h>
-
-
-
-
-
-
-
-
-
-typedef struct	s_RGB
+typedef struct	s_rgb
 {
 	float	r;
 	float	g;
 	float	b;
-}				t_RGB;
+}				t_rgb;
 
 typedef struct	s_vec2
 {
@@ -65,8 +50,8 @@ typedef struct	s_props
 {
 	t_vec3	pos;
 	t_vec3	rot;
-	float 	density;
-	t_RGB	color;
+	float	density;
+	t_rgb	color;
 	float	reflect;
 	float	radiance;
 }				t_props;
@@ -79,15 +64,15 @@ typedef struct	s_plane
 typedef struct	s_cylinder
 {
 	t_props	props;
-	float radius;
-	float height;
+	float	radius;
+	float	height;
 }				t_cylinder;
 
 typedef struct	s_cone
 {
 	t_props	props;
-	float radius;
-	float height;
+	float	radius;
+	float	height;
 }				t_cone;
 
 typedef struct	s_sphere
@@ -116,9 +101,9 @@ typedef struct	s_scene
 	t_vec3	cam_rot;
 	t_list	*objects;
 	t_list	*closest;
-	t_light	currentLight;
-	t_ray	lightRay;
-	t_RGB	color;
+	t_light	current_light;
+	t_ray	light_ray;
+	t_rgb	color;
 	float	coef;
 }				t_scene;
 
@@ -155,7 +140,7 @@ void			ft_tr_rotate(float matrix[4][4], float ax, float ay, float az);
 void			ft_make_identity_matrix(float matrix[4][4]);
 t_vec3			*ft_make_vec3(int x, int y, int z);
 t_vertex		*ft_make_vertex(int x, int y, int z);
-void			put_pixel(t_data *d, int x, int y, t_RGB color);
+void			put_pixel(t_data *d, int x, int y, t_rgb color);
 void			sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
 float			dot_vect(t_vec3 *v1, t_vec3 *v2);
 void			scale_vector(float c, t_vec3 *v, t_vec3 *d);

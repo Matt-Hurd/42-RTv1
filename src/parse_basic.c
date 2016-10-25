@@ -37,7 +37,7 @@ void	parse_props(t_list *list, t_props *props)
 		}
 		list = list->next;
 	}
-	scale_vector(M_PI / 180, props->rot);
+	scale_vector(M_PI / 180, &props->rot, &props->rot);
 }
 
 void	parse_sphere(t_data *d, t_list *list)

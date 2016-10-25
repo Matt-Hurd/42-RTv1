@@ -12,7 +12,7 @@
 
 #include "rtv1.h"
 
-void	parse_color(char *color, t_RGB *ref)
+void	parse_color(char *color, t_rgb *ref)
 {
 	char **buff;
 
@@ -24,7 +24,7 @@ void	parse_color(char *color, t_RGB *ref)
 	ref->b = (float)ft_atoi(buff[2]) / 255;
 }
 
-void	clear_color(t_RGB *color)
+void	clear_color(t_rgb *color)
 {
 	color->r = 0;
 	color->g = 0;

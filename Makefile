@@ -18,7 +18,6 @@ SRC		= main.c \
 		  raytracer.c \
 		  hooks.c \
 		  error.c \
-		  debug.c \
 		  parse_basic.c \
 		  parse_light.c \
 		  parse_extras.c \

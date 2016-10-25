@@ -12,11 +12,11 @@
 
 #include "libgfx.h"
 
-void  scale_vector(float c, t_vec3 *v, t_vec3 *d)
+void	scale_vector(float c, t_vec3 *v, t_vec3 *d)
 {
-    d->x = v->x * c;
-    d->y = v->y * c;
-    d->z = v->z * c;
+	d->x = v->x * c;
+	d->y = v->y * c;
+	d->z = v->z * c;
 }
 
 void	normalize_vector(t_vec3 *v)
@@ -34,16 +34,16 @@ float	dot_vect(t_vec3 *v1, t_vec3 *v2)
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
 
-void  ft_add_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
+void	ft_add_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
 {
-       d->x = v1->x + v2->x;
-       d->y = v1->y + v2->y;
-       d->z = v1->z + v2->z;
+	d->x = v1->x + v2->x;
+	d->y = v1->y + v2->y;
+	d->z = v1->z + v2->z;
 }
 
-void  sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
+void	sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d)
 {
-       d->x = v1->x - v2->x;
-       d->y = v1->y - v2->y;
-       d->z = v1->z - v2->z;
+	d->x = v1->x - v2->x;
+	d->y = v1->y - v2->y;
+	d->z = v1->z - v2->z;
 }

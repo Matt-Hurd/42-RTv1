@@ -14,16 +14,12 @@
 
 void	normal_cylinder(t_ray *r, t_cylinder *cy, t_vec3 *n)
 {
-	float a;
+	t_vec3	v;
+	t_vec3	project;
 
-	a = (-cy->props.rot.x * cy->props.pos.x - cy->props.rot.y * cy->props.pos.y
-		- cy->props.rot.z * cy->props.pos.z + r->start.x * cy->props.rot.x +
-		r->start.y * cy->props.rot.y + r->start.z * cy->props.rot.z) /
-		(powf(cy->props.rot.x, 2) + powf(cy->props.rot.y, 2) +
-		powf(cy->props.rot.z, 2));
-	n->x = (r->start.x - (cy->props.pos.x + cy->props.rot.x * a));
-	n->y = (r->start.y - (cy->props.pos.y + cy->props.rot.y * a));
-	n->z = (r->start.z - (cy->props.pos.z + cy->props.rot.z * a));
+	sub_vect(&r->start, &cy->props.pos, &v);
+	scale_vector(dot_vect(&v, &cy->props.rot), &cy->props.rot, &project);
+	sub_vect(&v, &project, n);
 	normalize_vector(n);
 }
 
@@ -51,7 +47,7 @@ int		intersect_cylinder(t_ray *r, t_cylinder *cy, float *t)
 		a[1] = (-a[1] - sqrtf(discr)) / (2 * dot_vect(&oc, &oc));
 		a[0] = ((MIN(a[2], a[1]) < 0) ? MAX(a[2], a[1]) : MIN(a[2], a[1]));
 	}
-	if (discr >= 0 && a[0] > 0.01 && *t > a[0])
+	if (a[0] > 0.01 && *t > a[0])
 		*t = a[0];
 	return (*t == a[0]);
 }
