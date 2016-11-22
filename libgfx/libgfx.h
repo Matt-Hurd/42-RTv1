@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:42:11 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/22 22:46:15 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/11/09 18:26:46 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include <stdlib.h>
 # include <math.h>
+# include <pthread.h>
 # define ABS(x) ((x > 0) ? x : x * -1)
 # define SQ(x) (x * x)
 
@@ -54,6 +55,8 @@ typedef struct	s_props
 	t_rgb	color;
 	float	reflect;
 	float	radiance;
+	float	trans;
+	float	gloss;
 }				t_props;
 
 typedef struct	s_plane
@@ -65,14 +68,12 @@ typedef struct	s_cylinder
 {
 	t_props	props;
 	float	radius;
-	float	height;
 }				t_cylinder;
 
 typedef struct	s_cone
 {
 	t_props	props;
 	float	radius;
-	float	height;
 }				t_cone;
 
 typedef struct	s_sphere
@@ -88,9 +89,25 @@ typedef struct	s_light
 
 typedef struct	s_ray
 {
-	t_vec3 start;
-	t_vec3 dir;
+	t_vec3	start;
+	t_vec3	dir;
+	t_rgb	color;
+	float	radiance;
 }				t_ray;
+
+typedef struct	s_recurse
+{
+	t_list	*closest;
+	t_light	current_light;
+	t_ray	light_ray;
+	t_rgb	color;
+	char	lit;
+	float	coef;
+	t_ray	r;
+	t_vec3	n;
+	int		depth;
+	float	light;
+}				t_recurse;
 
 typedef struct	s_scene
 {
@@ -100,23 +117,27 @@ typedef struct	s_scene
 	t_vec3	cam_pos;
 	t_vec3	cam_rot;
 	t_list	*objects;
-	t_list	*closest;
-	t_light	current_light;
-	t_ray	light_ray;
-	t_rgb	color;
-	float	coef;
+	int		maxdepth;
+	int		count;
+	char	aa;
 }				t_scene;
 
 typedef struct	s_data
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*pixel_img;
-	int		bpp;
-	int		s_line;
-	int		ed;
-	t_scene *scene;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*pixel_img;
+	int			bpp;
+	int			s_line;
+	int			ed;
+	char		expired;
+	char		drawing;
+	t_rgb		**image;
+	t_scene		*s;
+	pthread_t	*input_thread;
+	pthread_t	*render_threads;
+	int			thread_count;
 }				t_data;
 
 enum			e_object
@@ -132,8 +153,6 @@ enum			e_object
 void			ft_mat_copy(float source[4][4], float dest[4][4]);
 void			ft_mat_mult(float m1[4][4], float m2[4][4], float d[4][4]);
 void			ft_vec_mult_mat(t_vec3 *s, float mat[4][4], t_vec3 *d);
-float			ft_cos(int x);
-float			ft_sin(int x);
 void			ft_tr_translate(float m[4][4], float tx, float ty, float tz);
 void			ft_tr_scale(float matrix[4][4], float sx, float sy, float sz);
 void			ft_tr_rotate(float matrix[4][4], float ax, float ay, float az);
@@ -144,5 +163,6 @@ void			put_pixel(t_data *d, int x, int y, t_rgb color);
 void			sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
 float			dot_vect(t_vec3 *v1, t_vec3 *v2);
 void			scale_vector(float c, t_vec3 *v, t_vec3 *d);
-void			ft_add_vector(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
+void			add_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
+void			free_all(t_data *d);
 #endif

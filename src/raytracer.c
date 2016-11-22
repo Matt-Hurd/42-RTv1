@@ -6,83 +6,121 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/22 22:42:52 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/22 22:48:02 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/11/15 16:32:21 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
-void	calc_light(t_data *d, t_list *curr, t_ray r, t_vec3 n)
+void	ray_trace(t_data *d, t_recurse *rec)
 {
-	int		obscured;
-	t_vec3	dist;
+	t_list	*curr;
 	float	t;
-	t_list	*curr2;
 
-	obscured = 0;
-	d->scene->current_light = *(t_light *)curr->content;
-	sub_vect(&d->scene->current_light.props.pos, &r.start, &dist);
-	t = sqrtf(dot_vect(&dist, &dist));
-	if (!(dot_vect(&n, &dist) <= 0.0f || t <= 0.0))
+	t = 3000000;
+	curr = d->s->objects;
+	rec->closest = NULL;
+	while (curr)
 	{
-		d->scene->light_ray.start = r.start;
-		normalize_vector(&dist);
-		d->scene->light_ray.dir = dist;
-		curr2 = d->scene->objects;
-		while (curr2 && !obscured)
-		{
-			if (intersect_shape(&d->scene->light_ray,
-				curr2->content, curr2->content_size, &t))
-				obscured = 1;
-			curr2 = curr2->next;
-		}
-		if (!obscured)
-			color_point(d, n, &d->scene->color, d->scene->coef);
+		if (intersect_shape(&rec->r, curr, &t, 0))
+			rec->closest = curr;
+		curr = curr->next;
+	}
+	if (rec->closest)
+	{
+		rec->lit = 0;
+		find_light(d, t, rec);
 	}
 }
 
-void	color_point(t_data *d, t_vec3 n, t_rgb *color, float coef)
+void	find_light(t_data *d, float t, t_recurse *rec)
 {
-	float lambert;
-	float gloss;
-
-	lambert = dot_vect(&d->scene->light_ray.dir, &n) * coef;
-	gloss = ((t_sphere *)d->scene->closest->content)->props.reflect > 0
-		? dot_vect(&d->scene->light_ray.dir, &n) : 0;
-	gloss = gloss > 0.95 ? (gloss - 0.95) * 10 : 0;
-	color->r += MAX(0, SQ(gloss));
-	color->g += MAX(0, SQ(gloss));
-	color->b += MAX(0, SQ(gloss));
-	color->r += lambert * d->scene->current_light.props.color.r *
-		((t_sphere *)d->scene->closest->content)->props.color.r *
-		d->scene->current_light.props.radiance;
-	color->g += lambert * d->scene->current_light.props.color.g *
-		((t_sphere *)d->scene->closest->content)->props.color.g *
-		d->scene->current_light.props.radiance;
-	color->b += lambert * d->scene->current_light.props.color.b *
-		((t_sphere *)d->scene->closest->content)->props.color.b *
-		d->scene->current_light.props.radiance;
-}
-
-void	find_light(t_data *d, float t, t_list *curr, t_ray *r)
-{
-	t_vec3	n;
 	t_vec3	*temp;
+	t_list	*curr;
 
 	temp = (t_vec3 *)ft_memalloc(sizeof(t_vec3));
-	scale_vector(t, &r->dir, temp);
-	ft_add_vector(&r->start, temp, &r->start);
-	normal_shape(r, &n, d->scene->closest);
-	curr = d->scene->objects;
+	scale_vector(t, &rec->r.dir, temp);
+	add_vect(&rec->r.start, temp, &rec->r.start);
+	normal_shape(&rec->r, &rec->n, rec->closest, 0);
+	curr = d->s->objects;
+	rec->light = 0;
 	while (curr)
 	{
 		if (curr->content_size == LIGHT)
-			calc_light(d, curr, *r, n);
+			calc_light(d, rec, curr);
 		curr = curr->next;
 	}
-	scale_vector(((d->scene->closest->content_size == SPHERE) ? 1 : 2) *
-		dot_vect(&r->dir, &n), &n, temp);
-	sub_vect(&r->dir, temp, &r->dir);
+	scale_vector(2 * dot_vect(&rec->r.dir, &rec->n), &rec->n, temp);
+	sub_vect(&rec->r.dir, temp, &rec->r.dir);
 	free(temp);
-	d->scene->coef *= ((t_sphere *)d->scene->closest->content)->props.reflect;
+	rec->coef *= ((t_sphere *)rec->closest->content)->props.reflect;
+	rec->coef *= MIN(rec->light, 1);
+}
+
+void	calc_light(t_data *d, t_recurse *rec, t_list *curr)
+{
+	float	obscured;
+	float	t[2];
+	t_list	*curr2;
+
+	obscured = 1.0;
+	rec->current_light = *(t_light *)curr->content;
+	sub_vect(&rec->current_light.props.pos, &rec->r.start, &rec->light_ray.dir);
+	t[0] = sqrtf(dot_vect(&rec->light_ray.dir, &rec->light_ray.dir));
+	if (!(dot_vect(&rec->n, &rec->light_ray.dir) <= 0.0f || t[0] <= 0.0))
+	{
+		rec->light_ray.start = rec->r.start;
+		normalize_vector(&rec->light_ray.dir);
+		rec->light_ray.color = rec->current_light.props.color;
+		rec->light_ray.radiance = rec->current_light.props.radiance;
+		curr2 = d->s->objects;
+		while (curr2 && obscured > 0.0)
+		{
+			t[1] = t[0];
+			if (intersect_shape(&rec->light_ray, curr2, &t[1], 0))
+				obscured = 0;
+			curr2 = curr2->next;
+		}
+		if (obscured > 0.0)
+			color_point(rec, obscured);
+	}
+}
+
+float	calc_blinn(t_recurse *rec)
+{
+	t_vec3		half;
+	float		blinn_term;
+	float		reflect;
+	float		gloss;
+
+	reflect = ((t_sphere *)rec->closest->content)->props.reflect;
+	gloss = ((t_sphere *)rec->closest->content)->props.gloss;
+	sub_vect(&rec->light_ray.dir, &rec->r.dir, &half);
+	normalize_vector(&half);
+	blinn_term = dot_vect(&half, &rec->n);
+	blinn_term = MAX(0, reflect * powf(blinn_term, gloss * 100));
+	if (gloss < 0.1)
+		blinn_term = 0;
+	return (blinn_term);
+}
+
+void	color_point(t_recurse *rec, float obscured)
+{
+	float	lambert;
+	float	blinn;
+
+	(void)obscured;
+	rec->lit = 1;
+	lambert = dot_vect(&rec->light_ray.dir, &rec->n);
+	rec->light += lambert;
+	blinn = calc_blinn(rec);
+	lambert += blinn;
+	lambert *= rec->coef;
+	lambert *= rec->light_ray.radiance;
+	rec->color.r += lambert * rec->light_ray.color.r *
+		((t_sphere *)rec->closest->content)->props.color.r;
+	rec->color.g += lambert * rec->light_ray.color.g *
+		((t_sphere *)rec->closest->content)->props.color.g;
+	rec->color.b += lambert * rec->light_ray.color.b *
+		((t_sphere *)rec->closest->content)->props.color.b;
 }

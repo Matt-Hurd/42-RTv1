@@ -6,11 +6,11 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/20 20:57:34 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/22 21:43:58 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/31 22:44:54 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void	normal_plane(t_ray *r, t_plane *p, t_vec3 *n)
 {

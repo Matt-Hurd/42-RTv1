@@ -6,15 +6,15 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 17:14:06 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/22 21:05:55 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/11/15 16:31:19 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void	parse_props(t_list *list, t_props *props)
 {
-	char		**buff;
+	char	**buff;
 
 	while (list && !ft_strchr(list->content, '['))
 	{
@@ -22,7 +22,6 @@ void	parse_props(t_list *list, t_props *props)
 		{
 			buff = ft_strsplit(list->content, '=');
 			buff[0] = ft_strtrim(buff[0]);
-			buff[1] = ft_strtrim(buff[1]);
 			if (ft_strequ(buff[0], "pos"))
 				parse_triple(buff[1], &props->pos);
 			else if (ft_strequ(buff[0], "rot"))
@@ -31,6 +30,8 @@ void	parse_props(t_list *list, t_props *props)
 				parse_color(buff[1], &props->color);
 			else if (ft_strequ(buff[0], "reflect"))
 				props->reflect = (float)ft_atoi(buff[1]) / 100;
+			else if (ft_strequ(buff[0], "gloss"))
+				props->gloss = (float)ft_atoi(buff[1]) / 100;
 			else if (ft_strequ(buff[0], "radiance"))
 				props->radiance = (float)ft_atoi(buff[1]) / 100;
 			free(buff);
@@ -47,8 +48,8 @@ void	parse_sphere(t_data *d, t_list *list)
 
 	sphere = (t_sphere *)ft_memalloc(sizeof(t_sphere));
 	parse_props(list, &sphere->props);
-	if (!d->scene)
-		d->scene = (t_scene *)ft_memalloc(sizeof(t_scene));
+	if (!d->s)
+		d->s = (t_scene *)ft_memalloc(sizeof(t_scene));
 	while (list && !ft_strchr(list->content, '['))
 	{
 		set_radius(list, sphere, SPHERE);
@@ -56,7 +57,7 @@ void	parse_sphere(t_data *d, t_list *list)
 	}
 	ret = ft_lstnew(sphere, sizeof(t_sphere));
 	ret->content_size = SPHERE;
-	ft_lstadd(&d->scene->objects, ret);
+	ft_lstadd(&d->s->objects, ret);
 }
 
 void	parse_plane(t_data *d, t_list *list)
@@ -79,7 +80,7 @@ void	parse_plane(t_data *d, t_list *list)
 	ft_vec_mult_mat(&n, global_matrix, &plane->props.rot);
 	ret = ft_lstnew(plane, sizeof(t_plane));
 	ret->content_size = PLANE;
-	ft_lstadd(&d->scene->objects, ret);
+	ft_lstadd(&d->s->objects, ret);
 }
 
 void	parse_cylinder(t_data *d, t_list *list)
@@ -107,7 +108,7 @@ void	parse_cylinder(t_data *d, t_list *list)
 	ft_vec_mult_mat(&n, global_matrix, &cylinder->props.rot);
 	ret = ft_lstnew(cylinder, sizeof(t_cylinder));
 	ret->content_size = CYLINDER;
-	ft_lstadd(&d->scene->objects, ret);
+	ft_lstadd(&d->s->objects, ret);
 }
 
 void	parse_cone(t_data *d, t_list *list)
@@ -135,5 +136,5 @@ void	parse_cone(t_data *d, t_list *list)
 	ft_vec_mult_mat(&n, global_matrix, &cone->props.rot);
 	ret = ft_lstnew(cone, sizeof(t_cone));
 	ret->content_size = CONE;
-	ft_lstadd(&d->scene->objects, ret);
+	ft_lstadd(&d->s->objects, ret);
 }

@@ -6,11 +6,11 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 18:59:58 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/18 19:09:46 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/10/28 01:13:15 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void	parse_light(t_data *d, t_list *list)
 {
@@ -21,5 +21,5 @@ void	parse_light(t_data *d, t_list *list)
 	parse_props(list, &light->props);
 	ret = ft_lstnew(light, sizeof(t_light));
 	ret->content_size = LIGHT;
-	ft_lstadd(&d->scene->objects, ret);
+	ft_lstadd(&d->s->objects, ret);
 }
