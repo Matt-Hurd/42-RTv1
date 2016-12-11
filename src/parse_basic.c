@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 17:14:06 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/15 16:31:19 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/10 12:39:10 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,28 @@
 void	parse_props(t_list *list, t_props *props)
 {
 	char	**buff;
+	char	*tmp;
 
 	while (list && !ft_strchr(list->content, '['))
 	{
 		if (ft_strchr(list->content, '='))
 		{
 			buff = ft_strsplit(list->content, '=');
-			buff[0] = ft_strtrim(buff[0]);
+			tmp = ft_strtrim(buff[0]);
 			if (ft_strequ(buff[0], "pos"))
 				parse_triple(buff[1], &props->pos);
-			else if (ft_strequ(buff[0], "rot"))
+			else if (ft_strequ(tmp, "rot"))
 				parse_triple(buff[1], &props->rot);
-			else if (ft_strequ(buff[0], "color"))
+			else if (ft_strequ(tmp, "color"))
 				parse_color(buff[1], &props->color);
-			else if (ft_strequ(buff[0], "reflect"))
+			else if (ft_strequ(tmp, "reflect"))
 				props->reflect = (float)ft_atoi(buff[1]) / 100;
-			else if (ft_strequ(buff[0], "gloss"))
+			else if (ft_strequ(tmp, "gloss"))
 				props->gloss = (float)ft_atoi(buff[1]) / 100;
-			else if (ft_strequ(buff[0], "radiance"))
+			else if (ft_strequ(tmp, "radiance"))
 				props->radiance = (float)ft_atoi(buff[1]) / 100;
-			free(buff);
+			ft_free_strsplit(list->content, buff, '=');
+			free(tmp);
 		}
 		list = list->next;
 	}
@@ -56,6 +58,7 @@ void	parse_sphere(t_data *d, t_list *list)
 		list = list->next;
 	}
 	ret = ft_lstnew(sphere, sizeof(t_sphere));
+	free(sphere);
 	ret->content_size = SPHERE;
 	ft_lstadd(&d->s->objects, ret);
 }
@@ -79,6 +82,7 @@ void	parse_plane(t_data *d, t_list *list)
 		plane->props.rot.z);
 	ft_vec_mult_mat(&n, global_matrix, &plane->props.rot);
 	ret = ft_lstnew(plane, sizeof(t_plane));
+	free(plane);
 	ret->content_size = PLANE;
 	ft_lstadd(&d->s->objects, ret);
 }
@@ -107,6 +111,7 @@ void	parse_cylinder(t_data *d, t_list *list)
 		cylinder->props.rot.z);
 	ft_vec_mult_mat(&n, global_matrix, &cylinder->props.rot);
 	ret = ft_lstnew(cylinder, sizeof(t_cylinder));
+	free(cylinder);
 	ret->content_size = CYLINDER;
 	ft_lstadd(&d->s->objects, ret);
 }
@@ -135,6 +140,7 @@ void	parse_cone(t_data *d, t_list *list)
 		cone->props.rot.z);
 	ft_vec_mult_mat(&n, global_matrix, &cone->props.rot);
 	ret = ft_lstnew(cone, sizeof(t_cone));
+	free(cone);
 	ret->content_size = CONE;
 	ft_lstadd(&d->s->objects, ret);
 }

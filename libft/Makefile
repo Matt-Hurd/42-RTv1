@@ -2,7 +2,7 @@ NAME =	libft.a
 FLAGS =	-Wall -Wextra -Werror -O3
 CC = 	gcc
 ODIR =	bin/
-IDIR = 
+IDIR =
 SRC =
 OBJ =	$(SRC:.c=.o)
 EXT =	$(IDIR)$(NAME:.a=.h)
@@ -83,6 +83,7 @@ SRC +=	ft_strsplit.c
 SRC +=	ft_strcjoin.c
 SRC +=	ft_printjoin.c
 SRC	+=	ft_count_words.c
+SRC +=	ft_free_strsplit.c
 # **************************************************************************** #
 # integer                                                                      #
 # **************************************************************************** #
@@ -131,7 +132,7 @@ clean:
 
 fclean: clean
 	@echo "-> Cleaning $(NAME)..."
-	@rm -f $(NAME) 
+	@rm -f $(NAME)
 
 re: fclean all
 

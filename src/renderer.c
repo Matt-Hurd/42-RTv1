@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 04:47:42 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/15 16:30:21 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/10 11:57:16 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	*do_recurse(void *args)
 		a->d->image[(z / a->d->s->size.x)][(z % a->d->s->size.x)] = rec->color;
 		a->d->s->count++;
 	}
+	free(rec);
 	free(args);
 	return (NULL);
 }

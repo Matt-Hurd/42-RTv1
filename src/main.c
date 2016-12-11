@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 15:35:03 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/27 23:06:22 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/10 13:05:14 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int		main(int ac, char **av)
 	{
 		data = (t_data *)ft_memalloc(sizeof(t_data));
 		if (!data)
+		{
+			free(data);
 			ft_error("Malloc Error");
+		}
 		parse_file(data, av[1]);
 		create_input_thread(data);
 		display_help();

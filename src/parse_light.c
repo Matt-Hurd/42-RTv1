@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/18 18:59:58 by mhurd             #+#    #+#             */
-/*   Updated: 2016/10/28 01:13:15 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/10 12:33:50 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	parse_light(t_data *d, t_list *list)
 	light = (t_light *)ft_memalloc(sizeof(t_light));
 	parse_props(list, &light->props);
 	ret = ft_lstnew(light, sizeof(t_light));
+	free(light);
 	ret->content_size = LIGHT;
 	ft_lstadd(&d->s->objects, ret);
 }

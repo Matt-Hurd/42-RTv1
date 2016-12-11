@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:06:16 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/15 16:32:02 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/04 21:37:17 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ int				add_object(char **s, t_data *d);
 int				del_object(char **s, t_data *d);
 t_list			*get_object(t_data *d, int num);
 void			display_help(void);
+void			validate_scene(t_data *d);
 
 #endif

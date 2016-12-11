@@ -1,37 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ft_free_strsplit.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/11 04:21:33 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/10 12:44:38 by mhurd            ###   ########.fr       */
+/*   Created: 2016/12/10 11:43:59 by mhurd             #+#    #+#             */
+/*   Updated: 2016/12/10 11:48:21 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "libft.h"
+#include <stdlib.h>
 
-void	validate_scene(t_data *d)
+void	ft_free_strsplit(char *s, char **buff, char split)
 {
-	if (!d || !d->s || !d->s->fov || !d->s->size.x
-			|| !d->s->size.y || !d->s->name)
-		ft_error("Invalid config");
-}
+	int x;
+	int len;
 
-void	ft_exit(void)
-{
-	exit(1);
-}
-
-void	ft_error(char *s)
-{
-	ft_putendl_fd(s, 2);
-	ft_exit();
-}
-
-void	ft_error_unknown(void)
-{
-	ft_putstr("Error: ");
-	ft_error(strerror(errno));
+	len = ft_count_words(s, split);
+	x = -1;
+	while (++x < len)
+		free(buff[x]);
+	free(buff);
 }
