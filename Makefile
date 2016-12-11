@@ -6,7 +6,7 @@
 #    By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/28 19:34:56 by mhurd             #+#    #+#              #
-#    Updated: 2016/12/04 21:45:52 by mhurd            ###   ########.fr        #
+#    Updated: 2016/12/11 09:40:31 by mhurd            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,23 +18,32 @@ SRC		= main.c \
 		  raytracer.c \
 		  hooks.c \
 		  error.c \
+		  color_point.c \
 		  parse_basic.c \
 		  parse_light.c \
 		  parse_extras.c \
+		  parse_shapes.c \
+		  parse_model.c \
 		  intersect_sphere.c \
 		  intersect_cylinder.c \
 		  intersect_plane.c \
 		  intersect_cone.c \
+		  intersect_model.c \
 		  helpers.c \
 		  post.c \
+		  handle_trans.c \
 		  manip_colors.c \
+		  ssaa.c \
+		  perlin.c \
+		  update_model.c \
 		  /user_input/user_input.c \
 		  /user_input/print_objects.c \
+		  /user_input/print_model.c \
 		  /user_input/print_scene.c \
 		  /user_input/parse_misc.c \
 		  /user_input/modify_object.c \
 		  /user_input/add_object.c \
-		  ssaa.c
+		  /user_input/set_props.c \
 
 ifdef ALLOCWRAP
 	LDFLAGS += $(HOME)/lib/alloc_wrap.c -ldl
@@ -99,6 +108,9 @@ clean:
 	make -C ./libft clean
 	make -C ./minilibx clean
 	make -C ./libgfx clean
+
+nm: all
+	nm -U RT 2>/dev/null | grep -ve '^[[:space:]]*$' | grep -v ':'|  sed -E 's/^_//' | tr "\t" " " | sed 's/.* //'
 
 fclean: clean
 	rm -rf $(NAME)

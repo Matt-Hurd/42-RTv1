@@ -6,11 +6,16 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 04:47:42 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/10 11:57:16 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 08:20:47 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+
+/*
+**TODO:
+**	Check error handling for all input files
+*/
 
 void	*do_recurse(void *args)
 {
@@ -75,16 +80,16 @@ void	draw_reload(t_data *d)
 	d->drawing = 1;
 	d->expired = 0;
 	d->s->count = 0;
-	draw_screen(d);
-	x = -1;
-	while (++x < d->thread_count)
-		pthread_join(d->render_threads[x], NULL);
 	if (d->img)
 		mlx_destroy_image(d->mlx, d->img);
 	d->img =
 		mlx_new_image(d->mlx, d->s->size.x + 100, d->s->size.y + 100);
 	d->pixel_img =
 		mlx_get_data_addr(d->img, &(d->bpp), &(d->s_line), &(d->ed));
+	draw_screen(d);
+	x = -1;
+	while (++x < d->thread_count)
+		pthread_join(d->render_threads[x], NULL);
 	post_process(d);
 	mlx_put_image_to_window(d->mlx, d->win, d->img, 0, 0);
 	d->drawing = 0;
@@ -103,6 +108,7 @@ void	draw_everything(t_data *d)
 {
 	int y;
 
+	init_perlin();
 	d->mlx = mlx_init();
 	d->win = mlx_new_window(d->mlx, d->s->size.x,
 		d->s->size.y, d->s->name);

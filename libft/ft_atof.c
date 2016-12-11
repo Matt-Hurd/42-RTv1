@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_atof.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/08 15:35:03 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:48:36 by mhurd            ###   ########.fr       */
+/*   Created: 2016/12/11 08:26:12 by mhurd             #+#    #+#             */
+/*   Updated: 2016/12/11 08:34:59 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "libft.h"
 
-void	display_usage(char *av)
+/*
+** Handles floats up to max int or down to min int
+*/
+
+double	ft_atof(const char *str)
 {
-	ft_putstr("usage: ");
-	ft_putstr(av);
-	ft_putendl(" input_file");
-}
+	double	res;
+	double	res2;
+	char	*c;
+	int		len;
 
-int		main(int ac, char **av)
-{
-	t_data	*data;
-
-	if (ac == 2)
-	{
-		data = (t_data *)ft_memalloc(sizeof(t_data));
-		if (!data)
-			ft_error("Malloc Error");
-		parse_file(data, av[1]);
-		create_input_thread(data);
-		display_help();
-		draw_everything(data);
-	}
-	else
-		display_usage(av[0]);
-	return (0);
+	c = (char *)str;
+	res = (double)ft_atoi(c);
+	while (*c && *c != '.')
+		c++;
+	if (*c == '.')
+		c++;
+	res2 = (double)ft_atoi(c);
+	len = ft_strlen(c);
+	while (len--)
+		res2 /= 10;
+	return (res + ((res > 0) ? res2 : -res2));
 }

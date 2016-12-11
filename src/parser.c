@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 19:26:41 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/10 13:09:27 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:33:21 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	parse_triple(char *triple, t_vec3 *ref)
 {
-	char	**buff;
+	char **buff;
 
 	buff = ft_strsplit(triple, ',');
 	if (ft_count_words(triple, ',') != 3)
@@ -28,7 +28,7 @@ void	parse_triple(char *triple, t_vec3 *ref)
 void	set_scene(t_data *d, char **buff)
 {
 	if (ft_strequ(buff[0], "name"))
-		d->s->name = buff[1];
+		d->s->name = ft_strdup(buff[1]);
 	else if (ft_strequ(buff[0], "width"))
 		d->s->size.x = ft_atoi(buff[1]);
 	else if (ft_strequ(buff[0], "height"))
@@ -89,6 +89,8 @@ void	parse_list(t_data *d, t_list *list)
 			parse_plane(d, list->next);
 		if (ft_strequ(list->content, "[light]"))
 			parse_light(d, list->next);
+		if (ft_strequ(list->content, "[model]"))
+			parse_model(d, list->next);
 		if (list)
 			list = list->next;
 	}

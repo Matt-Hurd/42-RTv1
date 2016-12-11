@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:42:11 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/09 18:26:46 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:16:25 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # include <pthread.h>
 # define ABS(x) ((x > 0) ? x : x * -1)
 # define SQ(x) (x * x)
+# define CLAMP(x, lo, hi) MAX(MIN(x, hi), lo)
+
+enum			e_material
+{
+	MAT_NONE,
+	MAT_MARBLE
+};
 
 typedef struct	s_rgb
 {
@@ -57,6 +64,9 @@ typedef struct	s_props
 	float	radiance;
 	float	trans;
 	float	gloss;
+	int		material;
+	float	bump;
+	char	object;
 }				t_props;
 
 typedef struct	s_plane
@@ -82,6 +92,21 @@ typedef struct	s_sphere
 	float	radius;
 }				t_sphere;
 
+typedef struct	s_model
+{
+	t_props	props;
+	t_vec3	*vertices_origin;
+	t_vec3	*vertices;
+	t_vec3	*normals;
+	t_vec3	*normals_origin;
+	int		**faces;
+	int		vc;
+	int		vnc;
+	char	*filename;
+	float	scale;
+	int		face_count;
+}				t_model;
+
 typedef struct	s_light
 {
 	t_props	props;
@@ -93,6 +118,7 @@ typedef struct	s_ray
 	t_vec3	dir;
 	t_rgb	color;
 	float	radiance;
+	int		face;
 }				t_ray;
 
 typedef struct	s_recurse
@@ -105,8 +131,10 @@ typedef struct	s_recurse
 	float	coef;
 	t_ray	r;
 	t_vec3	n;
+	t_vec3	start;
 	int		depth;
 	float	light;
+	int		face;
 }				t_recurse;
 
 typedef struct	s_scene
@@ -147,7 +175,8 @@ enum			e_object
 	PLANE,
 	CONE,
 	CYLINDER,
-	LIGHT
+	LIGHT,
+	MODEL
 };
 
 void			ft_mat_copy(float source[4][4], float dest[4][4]);
@@ -157,12 +186,14 @@ void			ft_tr_translate(float m[4][4], float tx, float ty, float tz);
 void			ft_tr_scale(float matrix[4][4], float sx, float sy, float sz);
 void			ft_tr_rotate(float matrix[4][4], float ax, float ay, float az);
 void			ft_make_identity_matrix(float matrix[4][4]);
-t_vec3			*ft_make_vec3(int x, int y, int z);
-t_vertex		*ft_make_vertex(int x, int y, int z);
+t_vec3			*ft_make_vec3(float x, float y, float z);
+void			ft_set_vec3(t_vec3 *vec, float x, float y, float z);
 void			put_pixel(t_data *d, int x, int y, t_rgb color);
 void			sub_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
 float			dot_vect(t_vec3 *v1, t_vec3 *v2);
 void			scale_vector(float c, t_vec3 *v, t_vec3 *d);
 void			add_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *d);
+void			cross_vect(t_vec3 *v1, t_vec3 *v2, t_vec3 *out);
+float			length_vect(t_vec3 *in);
 void			free_all(t_data *d);
 #endif

@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/19 20:32:43 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/10 11:45:45 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:17:59 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	parse_color(char *color, t_rgb *ref)
 	buff = ft_strsplit(color, ',');
 	if (ft_count_words(color, ',') != 3)
 		ft_error("Config Format Error");
-	ref->r = (float)ft_atoi(buff[0]) / 255;
-	ref->g = (float)ft_atoi(buff[1]) / 255;
-	ref->b = (float)ft_atoi(buff[2]) / 255;
+	ref->r = (float)CLAMP(ft_atoi(buff[0]), 0, 255) / 255;
+	ref->g = (float)CLAMP(ft_atoi(buff[1]), 0, 255) / 255;
+	ref->b = (float)CLAMP(ft_atoi(buff[2]), 0, 255) / 255;
 	ft_free_strsplit(color, buff, ',');
 }
 
@@ -35,6 +35,8 @@ void	normal_shape(t_ray *r, t_vec3 *n, t_list *s, char intern)
 		normal_plane(r, s->content, n);
 	else if (s->content_size == CONE)
 		normal_cone(r, s->content, n, intern);
+	else if (s->content_size == MODEL)
+		normal_model(r, s->content, n, intern);
 	else
 		return ;
 }
@@ -49,6 +51,8 @@ int		intersect_shape(t_ray *r, t_list *s, float *t, char intern)
 		return (intersect_plane(r, s->content, t));
 	else if (s->content_size == CONE)
 		return (intersect_cone(r, s->content, t, intern));
+	else if (s->content_size == MODEL)
+		return (intersect_model(r, s->content, t));
 	else
 		return (0);
 }

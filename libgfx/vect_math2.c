@@ -1,39 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   vect_math2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/08 15:35:03 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:48:36 by mhurd            ###   ########.fr       */
+/*   Created: 2016/12/11 08:53:18 by mhurd             #+#    #+#             */
+/*   Updated: 2016/12/11 08:53:37 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "libgfx.h"
 
-void	display_usage(char *av)
+float	length_vect(t_vec3 *in)
 {
-	ft_putstr("usage: ");
-	ft_putstr(av);
-	ft_putendl(" input_file");
+	return (sqrtf(pow(in->x, 2) + pow(in->y, 2) + pow(in->z, 2)));
 }
 
-int		main(int ac, char **av)
+float	dot_vect(t_vec3 *v1, t_vec3 *v2)
 {
-	t_data	*data;
-
-	if (ac == 2)
-	{
-		data = (t_data *)ft_memalloc(sizeof(t_data));
-		if (!data)
-			ft_error("Malloc Error");
-		parse_file(data, av[1]);
-		create_input_thread(data);
-		display_help();
-		draw_everything(data);
-	}
-	else
-		display_usage(av[0]);
-	return (0);
+	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }

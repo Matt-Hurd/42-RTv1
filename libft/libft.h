@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 09:58:28 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/10 11:45:02 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 08:31:11 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void			ft_free_strsplit(char *s, char **buff, char split);
 */
 
 int				ft_atoi(const char *nptr);
+double			ft_atof(const char *str);
 char			*ft_itoa(int n);
 
 /*
