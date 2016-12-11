@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 19:26:41 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:33:21 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:56:06 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ void	parse_list(t_data *d, t_list *list)
 			parse_plane(d, list->next);
 		if (ft_strequ(list->content, "[light]"))
 			parse_light(d, list->next);
-		if (ft_strequ(list->content, "[model]"))
-			parse_model(d, list->next);
 		if (list)
 			list = list->next;
 	}

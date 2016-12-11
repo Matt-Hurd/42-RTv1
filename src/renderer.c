@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/09 04:47:42 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 08:20:47 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:56:14 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ void	draw_everything(t_data *d)
 {
 	int y;
 
-	init_perlin();
 	d->mlx = mlx_init();
 	d->win = mlx_new_window(d->mlx, d->s->size.x,
 		d->s->size.y, d->s->name);

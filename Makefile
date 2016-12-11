@@ -6,7 +6,7 @@
 #    By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/28 19:34:56 by mhurd             #+#    #+#              #
-#    Updated: 2016/12/11 09:40:31 by mhurd            ###   ########.fr        #
+#    Updated: 2016/12/11 09:54:28 by mhurd            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,19 +23,14 @@ SRC		= main.c \
 		  parse_light.c \
 		  parse_extras.c \
 		  parse_shapes.c \
-		  parse_model.c \
 		  intersect_sphere.c \
 		  intersect_cylinder.c \
 		  intersect_plane.c \
 		  intersect_cone.c \
-		  intersect_model.c \
 		  helpers.c \
 		  post.c \
-		  handle_trans.c \
 		  manip_colors.c \
 		  ssaa.c \
-		  perlin.c \
-		  update_model.c \
 		  /user_input/user_input.c \
 		  /user_input/print_objects.c \
 		  /user_input/print_model.c \

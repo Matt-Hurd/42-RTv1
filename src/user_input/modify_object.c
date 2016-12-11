@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/25 16:59:52 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/19 03:53:52 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 10:00:11 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,7 @@ static int	set_values(char **s, int c, t_list *obj, t_data *d)
 	if (ft_strequ(s[2], "radius") && (obj->content_size != PLANE &&
 		obj->content_size != LIGHT))
 		return (((t_sphere *)obj->content)->radius = ft_atoi(s[3]));
-	else
-	{
-		if (set_props(s, obj->content))
-		{
-			if (obj->content_size == MODEL)
-				update_model(obj->content);
-			return (1);
-		}
-		return (0);
-	}
+	return (0);
 }
 
 int			modify_object(char **s, int c, t_data *d)

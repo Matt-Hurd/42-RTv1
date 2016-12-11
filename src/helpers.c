@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/19 20:32:43 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:17:59 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:58:15 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	normal_shape(t_ray *r, t_vec3 *n, t_list *s, char intern)
 		normal_plane(r, s->content, n);
 	else if (s->content_size == CONE)
 		normal_cone(r, s->content, n, intern);
-	else if (s->content_size == MODEL)
-		normal_model(r, s->content, n, intern);
 	else
 		return ;
 }
@@ -51,8 +49,6 @@ int		intersect_shape(t_ray *r, t_list *s, float *t, char intern)
 		return (intersect_plane(r, s->content, t));
 	else if (s->content_size == CONE)
 		return (intersect_cone(r, s->content, t, intern));
-	else if (s->content_size == MODEL)
-		return (intersect_model(r, s->content, t));
 	else
 		return (0);
 }

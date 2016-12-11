@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/22 22:42:52 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:42:01 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:56:55 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,6 @@ void	ray_trace(t_data *d, t_recurse *rec)
 	}
 }
 
-void	bump_map(t_vec3 *n, t_props props, t_vec3 hit)
-{
-	float noise_x;
-	float noise_y;
-	float noise_z;
-
-	if (props.bump > 0)
-	{
-		noise_x = noise(0.1 * hit.x,
-			0.1 * hit.y, 0.1 * hit.z);
-		noise_y = noise(0.1 * hit.y,
-			0.1 * hit.z, 0.1 * hit.x);
-		noise_z = noise(0.1 * hit.z,
-			0.1 * hit.x, 0.1 * hit.y);
-		n->x = (1.0f - props.bump)
-			* n->x + props.bump * noise_x;
-		n->y = (1.0f - props.bump)
-			* n->y + props.bump * noise_y;
-		n->z = (1.0f - props.bump)
-			* n->z + props.bump * noise_z;
-		normalize_vector(n);
-	}
-}
-
 void	find_light(t_data *d, float t, t_recurse *rec)
 {
 	t_vec3	*temp;
@@ -68,9 +44,6 @@ void	find_light(t_data *d, float t, t_recurse *rec)
 	normal_shape(&rec->r, &rec->n, rec->closest, 0);
 	curr = d->s->objects;
 	rec->light = 0;
-	bump_map(&rec->n, ((t_sphere *)rec->closest->content)->props, rec->r.start);
-	if (((t_sphere *)rec->closest->content)->props.trans > 0)
-		rec->coef *= handle_trans(d, rec);
 	while (curr)
 	{
 		if (curr->content_size == LIGHT)
@@ -102,12 +75,7 @@ void	calc_light(t_data *d, t_recurse *rec, t_list *curr)
 		rec->light_ray.radiance = rec->current_light.props.radiance;
 		curr2 = d->s->objects;
 		while ((t[1] = t[0]) && curr2 && obscured > 0.0)
-		{
-			if (intersect_shape(&rec->light_ray, curr2, &t[1], 0) ||
-				intersect_shape(&rec->light_ray, curr2, &t[1], 1))
-				pass_through(d, rec, &obscured, curr2);
 			curr2 = curr2->next;
-		}
 		if (obscured > 0.0)
 			color_point(rec);
 	}

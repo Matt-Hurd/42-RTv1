@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/25 16:48:11 by mhurd             #+#    #+#             */
-/*   Updated: 2016/11/19 04:30:15 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 11:06:22 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,8 @@
 void	display_help(void)
 {
 	ft_putstr("Valid commands: \n\
-	aa on/off\n\
-		Enables/Disables AntiAliasing\n\
-	depth [num]\n\
-		Set the max recursion depth\n\
 	set [objnum] [prop] [value]\n\
-		Properties: posx/y/z, rotx/y/z, r/g/b, radiance, reflect\n\
-		Properties: gloss, trans, material, bump\n\
-		Materials:  marble\n\
+		Properties: posx/y/z, rotx/y/z, r/g/b, radiance, reflect, gloss\n\
 	add [objtype]\n\
 		Add an object of [sphere/cone/cylinder/plane/light]\n\
 	delete/rm [objnum]\n\

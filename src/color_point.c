@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 23:43:48 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:47:21 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:57:16 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,36 +30,13 @@ static float	calc_blinn(t_recurse *rec)
 	return (blinn_term);
 }
 
-static float	calc_noise_coef(t_recurse *rec)
-{
-	float	noise_coef;
-	int		level;
-
-	noise_coef = 0.0;
-	level = 0;
-	while (++level < 10)
-	{
-		noise_coef += (1.0f / level)
-		* fabs((float)noise(level * 0.05 * rec->r.start.x,
-		level * 0.05 * rec->r.start.y,
-		level * 0.05 * rec->r.start.z));
-	}
-	return (noise_coef);
-}
-
 void			color_point(t_recurse *rec)
 {
 	float	lambert;
 	float	blinn;
-	float	noise_coef;
 
 	rec->lit = 1;
 	lambert = dot_vect(&rec->light_ray.dir, &rec->n);
-	if (((t_sphere *)rec->closest->content)->props.material == MAT_MARBLE)
-	{
-		noise_coef = calc_noise_coef(rec);
-		lambert *= 1 - noise_coef / 4;
-	}
 	rec->light += lambert;
 	blinn = calc_blinn(rec);
 	lambert += blinn;

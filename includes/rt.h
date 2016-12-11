@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/08 16:06:16 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 08:49:29 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/11 09:55:04 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,7 @@ void			color_point(t_recurse *rec);
 void			post_process(t_data *d);
 void			create_input_thread(t_data *d);
 void			ray_trace(t_data *d, t_recurse *rec);
-float			handle_trans(t_data *d, t_recurse *rec);
-void			pass_through(t_data *d, t_recurse *r, float *o, t_list *c2);
 void			ssaa(t_args *a, t_vec3 point, t_recurse *rec, int depth);
-double			noise(double x, double y, double z);
-void			init_perlin(void);
 void			regular_pixel(t_args *a, t_vec3 point, t_recurse *rec);
 int				color_to_int(t_rgb color);
 
@@ -80,8 +76,6 @@ void			parse_cylinder(t_data *d, t_list *list);
 void			parse_plane(t_data *d, t_list *list);
 void			parse_props(t_list *list, t_props *props);
 void			parse_light(t_data *d, t_list *list);
-void			parse_model(t_data *d, t_list *list);
-void			parse_float_trip(t_vec3 *dest, char *line);
 
 void			scale_color(float scale, t_rgb *c1, t_rgb *c2);
 void			add_colors(t_rgb *c1, t_rgb *c2, t_rgb *c3);
@@ -93,14 +87,12 @@ int				intersect_cylinder(t_ray *r, t_cylinder *c, float *t, char i);
 int				intersect_plane(t_ray *r, t_plane *p, float *t);
 int				intersect_cone(t_ray *r, t_cone *c, float *t, char intern);
 int				intersect_sphere(t_ray *r, t_sphere *s, float *t, char intern);
-int				intersect_model(t_ray *r, t_model *m, float *t);
 
 void			normal_shape(t_ray *r, t_vec3 *n, t_list *s, char intern);
 void			normal_sphere(t_ray *r, t_sphere *s, t_vec3 *n, char intern);
 void			normal_plane(t_ray *r, t_plane *p, t_vec3 *n);
 void			normal_cylinder(t_ray *r, t_cylinder *c, t_vec3 *n, char i);
 void			normal_cone(t_ray *r, t_cone *c, t_vec3 *n, char intern);
-void			normal_model(t_ray *r, t_model *m, t_vec3 *n, char intern);
 
 void			print_vec3(t_vec3 v, float scale);
 void			print_scene_info(t_data *d);
@@ -111,7 +103,6 @@ void			print_plane_info(t_plane *plane);
 void			print_cone_info(t_cone *cone);
 void			print_cylinder_info(t_cylinder *cylinder);
 void			print_light_info(t_light *light);
-void			print_model_info(t_model *model);
 
 int				parse_misc(char **split, int c, t_data *d);
 int				modify_object(char **s, int c, t_data *d);
