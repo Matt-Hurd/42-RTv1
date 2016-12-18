@@ -6,7 +6,7 @@
 /*   By: mhurd <mhurd@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/22 22:42:52 by mhurd             #+#    #+#             */
-/*   Updated: 2016/12/11 09:56:55 by mhurd            ###   ########.fr       */
+/*   Updated: 2016/12/17 16:24:46 by mhurd            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,11 @@ void	calc_light(t_data *d, t_recurse *rec, t_list *curr)
 		rec->light_ray.radiance = rec->current_light.props.radiance;
 		curr2 = d->s->objects;
 		while ((t[1] = t[0]) && curr2 && obscured > 0.0)
+		{
+			if (intersect_shape(&rec->light_ray, curr2, &t[1], 0))
+				obscured = 0;
 			curr2 = curr2->next;
+		}
 		if (obscured > 0.0)
 			color_point(rec);
 	}
